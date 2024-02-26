@@ -1,3 +1,21 @@
+my_stuff/
+logs/
+docs/
+site/
+ignore_me/
+.ipynb_checkpoints
+.vscode
+.idea
+.mypy_cache
+.pytest_cache
+*.mustache
+*.csv
+*.h5
+dist
+quantfreedom.egg-info
+numba_cache
+thinking.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -136,7 +154,8 @@ venv.bak/
 .ropeproject
 
 # mkdocs documentation
-/site
+docs/site
+
 
 # mypy
 .mypy_cache/
