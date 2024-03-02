@@ -5,8 +5,8 @@ from quantfreedom.email_sender import EmailSender
 from quantfreedom.helper_funcs import dos_cart_product, get_dos, log_dynamic_order_settings
 from quantfreedom.live_mode import LiveTrading
 from quantfreedom.order_handler.order import OrderHandler
-from live_strat import RSIRisingFalling
-from my_stuff import EmailSenderInfo, MufexTestKeys
+from strat_test.live_strat import RSIsimple
+from my_stuff import EmailSenderInfo, BybitTestKeys
 from quantfreedom.enums import (
     CandleBodyType,
     DynamicOrderSettingsArrays,
@@ -20,14 +20,14 @@ from quantfreedom.enums import (
 )
 
 
-from quantfreedom.exchanges.mufex_exchange.mufex import Mufex
+from quantfreedom.exchanges.bybit_exchange.bybit import Bybit
 
 logger = getLogger("info")
 
-strategy = RSIRisingFalling(
+strategy = RSIsimple(
     long_short="long",
     rsi_length=np.array([14]),
-    rsi_is_below=np.arange(35, 61, 5),
+    rsi_is_below=np.array([100]),
 )
 
 logger.disabled = False
@@ -35,16 +35,12 @@ set_loggers(log_folder=strategy.log_folder)
 
 logger.debug("set strategy and logger")
 
-strategy.live_set_indicator(
-    ind_set_index=0,
-)
-strategy.log_indicator_settings(
-    ind_set_index=0,
-)
+strategy.live_set_indicator(ind_set_index=0)
+strategy.log_indicator_settings(ind_set_index=0)
 
-user_ex = Mufex(
-    api_key=MufexTestKeys.api_key,
-    secret_key=MufexTestKeys.secret_key,
+user_ex = Bybit(
+    api_key=BybitTestKeys.api_key,
+    secret_key=BybitTestKeys.secret_key,
     use_test_net=True,
 )
 logger.debug("set exchange")
@@ -80,9 +76,9 @@ static_os = StaticOrderSettings(
 logger.debug("set static order settings")
 
 dos_arrays = DynamicOrderSettingsArrays(
-    max_equity_risk_pct=np.array([0.03]),
+    max_equity_risk_pct=np.array([0.003]),
     max_trades=np.array([5]),
-    risk_account_pct_size=np.array([0.01]),
+    risk_account_pct_size=np.array([0.001]),
     risk_reward=np.array([2, 5]),
     sl_based_on_add_pct=np.array([0.1, 0.25, 0.5]),
     sl_based_on_lookback=np.array([20, 50]),
@@ -102,7 +98,10 @@ dynamic_order_settings = get_dos(
     dos_cart_arrays=dos_cart_arrays,
     dos_index=0,
 )
-log_dynamic_order_settings(dos_index=0, dynamic_order_settings=dynamic_order_settings)
+log_dynamic_order_settings(
+    dos_index=0,
+    dynamic_order_settings=dynamic_order_settings,
+)
 
 order = OrderHandler(
     exchange_settings=user_ex.exchange_settings,
