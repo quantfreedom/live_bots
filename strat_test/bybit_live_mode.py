@@ -80,7 +80,7 @@ class LiveTrading:
         )
         logger.info(f"Last Candle time {self.exchange.last_fetched_time_to_pd_datetime()}")
 
-        sleep(self.get_sleep_time_to_next_bar())
+        # sleep(self.get_sleep_time_to_next_bar())
 
         while True:
             try:
@@ -442,9 +442,9 @@ class LiveTrading:
 
         self.ex_position_size_asset = float(pos_info.get("size"))
         self.ex_position_size_usd = float(pos_info.get("positionValue"))
-        self.ex_average_entry = float(pos_info.get("entryPrice"))
+        self.ex_average_entry = float(pos_info.get("avgPrice"))
         self.avg_entry_slippage = self.__get_pct_difference(self.order.average_entry, self.ex_average_entry)
-        self.ex_entry_price = float(entry_info.get("execPrice"))
+        self.ex_entry_price = float(entry_info.get("avgPrice"))
         self.entry_slippage = self.__get_pct_difference(self.order.entry_price, self.ex_entry_price)
         self.ex_entry_size_asset = float(entry_info.get("execQty"))
         self.ex_entry_size_usd = float(entry_info.get("execValue"))
