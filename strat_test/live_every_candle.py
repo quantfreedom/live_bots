@@ -51,13 +51,13 @@ class EnterEveryCandle(Strategy):
             self.set_entries_exits_array = self.long_set_entries_exits_array
             self.log_indicator_settings = self.long_log_indicator_settings
             self.entry_message = self.long_entry_message
-            self.live_evalutate = self.long_live_evaluate
+            self.live_evaluate = self.long_live_evaluate
             self.chart_title = "Long Signal"
         else:
             self.set_entries_exits_array = self.short_set_entries_exits_array
             self.log_indicator_settings = self.short_log_indicator_settings
             self.entry_message = self.short_entry_message
-            self.live_evalutate = self.short_live_evaluate
+            self.live_evaluate = self.short_live_evaluate
             self.chart_title = "short Signal"
 
     #######################################################
@@ -79,7 +79,7 @@ class EnterEveryCandle(Strategy):
             self.rsi_is_below = self.indicator_settings_arrays.rsi_is_below[ind_set_index]
             self.rsi_length = self.indicator_settings_arrays.rsi_length[ind_set_index]
             self.h_line = self.rsi_is_below
-            
+
             self.current_ind_settings = IndicatorSettingsArrays(
                 rsi_is_above=self.rsi_is_above,
                 rsi_is_below=self.rsi_is_below,
@@ -220,7 +220,6 @@ class EnterEveryCandle(Strategy):
         self.rsi_is_below = self.indicator_settings_arrays.rsi_is_below[ind_set_index]
         self.rsi_is_above = self.indicator_settings_arrays.rsi_is_above[ind_set_index]
         self.rsi_length = self.indicator_settings_arrays.rsi_length[ind_set_index]
-        
         self.current_ind_settings = IndicatorSettingsArrays(
             rsi_is_above=self.rsi_is_above,
             rsi_is_below=self.rsi_is_below,
@@ -233,13 +232,39 @@ class EnterEveryCandle(Strategy):
         self,
         candles: np.array,
     ):
-        return True
+        try:
+            rsi = rsi_tv(
+                source=candles[:, CandleBodyType.Close],
+                length=self.rsi_length,
+            )
+
+            self.rsi = np.around(rsi, 1)
+            logger.info(f"Created RSI rsi_length= {self.rsi_length}")
+            logger.info("\n\n")
+            logger.info(f"Entry time!!!")
+            return True
+        except Exception as e:
+            logger.error(f"Exception live_evaluate -> {e}")
+            raise Exception(f"Exception live_evaluate -> {e}")
 
     def short_live_evaluate(
         self,
         candles: np.array,
     ):
-        return True
+        try:
+            rsi = rsi_tv(
+                source=candles[:, CandleBodyType.Close],
+                length=self.rsi_length,
+            )
+
+            self.rsi = np.around(rsi, 1)
+            logger.info(f"Created RSI rsi_length= {self.rsi_length}")
+            logger.info("\n\n")
+            logger.info(f"Entry time!!!")
+            return True
+        except Exception as e:
+            logger.error(f"Exception live_evaluate -> {e}")
+            raise Exception(f"Exception live_evaluate -> {e}")
 
     #######################################################
     #######################################################
