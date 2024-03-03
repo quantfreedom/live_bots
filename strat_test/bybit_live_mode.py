@@ -22,7 +22,7 @@ logger = getLogger("info")
 trade_logger = getLogger("trades")
 
 
-class LiveTrading:
+class BybitLiveMode:
     def __init__(
         self,
         email_sender: EmailSender,
@@ -446,8 +446,8 @@ class LiveTrading:
         self.avg_entry_slippage = self.__get_pct_difference(self.order.average_entry, self.ex_average_entry)
         self.ex_entry_price = float(entry_info.get("avgPrice"))
         self.entry_slippage = self.__get_pct_difference(self.order.entry_price, self.ex_entry_price)
-        self.ex_entry_size_asset = float(entry_info.get("execQty"))
-        self.ex_entry_size_usd = float(entry_info.get("execValue"))
+        self.ex_entry_size_asset = float(entry_info.get("qty"))
+        self.ex_entry_size_usd = float(entry_info.get("cumExecValue"))
         self.ex_leverage = float(pos_info.get("leverage"))
         self.ex_liq_price = float(pos_info.get("liqPrice"))
         self.ex_liq_pct = self.__get_pct_difference(starting_num=self.ex_average_entry, diff_num=self.ex_liq_price)

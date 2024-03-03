@@ -3,10 +3,9 @@ from logging import getLogger
 from quantfreedom.custom_logger import set_loggers
 from quantfreedom.email_sender import EmailSender
 from quantfreedom.helper_funcs import dos_cart_product, get_dos, log_dynamic_order_settings
-from quantfreedom.live_mode import LiveTrading
 from quantfreedom.order_handler.order import OrderHandler
+from my_stuff import BybitTestKeys
 from live_strat import RSIRisingFalling
-from my_stuff import EmailSenderInfo, MufexTestKeys
 from quantfreedom.enums import (
     CandleBodyType,
     DynamicOrderSettingsArrays,
@@ -19,15 +18,15 @@ from quantfreedom.enums import (
     PositionModeType,
 )
 
-
-from quantfreedom.exchanges.mufex_exchange.mufex import Mufex
+from quantfreedom.exchanges.bybit_exchange.bybit import Bybit
+from quantfreedom.exchanges.bybit_exchange.bybit_live_mode import BybitLiveMode
 
 logger = getLogger("info")
 
 strategy = RSIRisingFalling(
     long_short="long",
     rsi_length=np.array([14]),
-    rsi_is_below=np.arange(35, 61, 5),
+    rsi_is_below=np.array([100]),
 )
 
 logger.disabled = False
@@ -35,18 +34,15 @@ set_loggers(log_folder=strategy.log_folder)
 
 logger.debug("set strategy and logger")
 
-strategy.live_set_indicator(
-    ind_set_index=0,
-)
-strategy.log_indicator_settings(
-    ind_set_index=0,
-)
+strategy.live_set_indicator(ind_set_index=0)
+strategy.log_indicator_settings(ind_set_index=0)
 
-user_ex = Mufex(
-    api_key=MufexTestKeys.api_key,
-    secret_key=MufexTestKeys.secret_key,
+user_ex = Bybit(
+    api_key=BybitTestKeys.api_key,
+    secret_key=BybitTestKeys.secret_key,
     use_test_net=True,
 )
+
 logger.debug("set exchange")
 
 user_ex.set_exchange_settings(
@@ -64,7 +60,7 @@ except Exception as e:
     raise Exception(f"Couldn't get equity -> {e}")
 
 static_os = StaticOrderSettings(
-    increase_position_type=IncreasePositionType.RiskPctAccountEntrySize,
+    increase_position_type=IncreasePositionType.SmalletEntrySizeAsset,
     leverage_strategy_type=LeverageStrategyType.Dynamic,
     pg_min_max_sl_bcb="min",
     sl_strategy_type=StopLossStrategyType.SLBasedOnCandleBody,
@@ -80,9 +76,9 @@ static_os = StaticOrderSettings(
 logger.debug("set static order settings")
 
 dos_arrays = DynamicOrderSettingsArrays(
-    max_equity_risk_pct=np.array([0.03]),
-    max_trades=np.array([5]),
-    risk_account_pct_size=np.array([0.01]),
+    max_equity_risk_pct=np.array([0.003]),
+    max_trades=np.array([3]),
+    risk_account_pct_size=np.array([0.001]),
     risk_reward=np.array([2, 5]),
     sl_based_on_add_pct=np.array([0.1, 0.25, 0.5]),
     sl_based_on_lookback=np.array([20, 50]),
@@ -102,7 +98,10 @@ dynamic_order_settings = get_dos(
     dos_cart_arrays=dos_cart_arrays,
     dos_index=0,
 )
-log_dynamic_order_settings(dos_index=0, dynamic_order_settings=dynamic_order_settings)
+log_dynamic_order_settings(
+    dos_index=0,
+    dynamic_order_settings=dynamic_order_settings,
+)
 
 order = OrderHandler(
     exchange_settings=user_ex.exchange_settings,
@@ -116,15 +115,15 @@ order.update_class_dos(dynamic_order_settings=dynamic_order_settings)
 order.set_order_variables(equity=equity)
 
 email_sender = EmailSender(
-    smtp_server=EmailSenderInfo.smtp_server,
-    sender_email=EmailSenderInfo.sender_email,
-    password=EmailSenderInfo.password,
-    receiver=EmailSenderInfo.receiver,
+    smtp_server="sdfasdfasdf",
+    sender_email="sdfasdfasdf",
+    password="sdfasdfasdf",
+    receiver="sdfasdfasdf",
 )
 logger.debug("set email sender")
 
 logger.debug("running live trading")
-LiveTrading(
+BybitLiveMode(
     email_sender=email_sender,
     entry_order_type="market",
     exchange=user_ex,
@@ -134,6 +133,6 @@ LiveTrading(
     trading_with="USDT",
     tp_order_type="limit",
 ).run(
-    candles_to_dl=200,
+    candles_to_dl=1000,
     timeframe="1m",
 )

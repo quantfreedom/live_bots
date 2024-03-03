@@ -6,7 +6,7 @@ from quantfreedom.helper_funcs import dos_cart_product, get_dos, log_dynamic_ord
 from quantfreedom.order_handler.order import OrderHandler
 from my_stuff import BybitTestKeys
 # from my_stuff import EmailSenderInfo, BybitTestKeys
-from bybit_live_mode import LiveTrading
+from bybit_live_mode import BybitLiveMode
 from quantfreedom.enums import (
     CandleBodyType,
     DynamicOrderSettingsArrays,
@@ -125,7 +125,7 @@ email_sender = EmailSender(
 logger.debug("set email sender")
 
 logger.debug("running live trading")
-LiveTrading(
+BybitLiveMode(
     email_sender=email_sender,
     entry_order_type="market",
     exchange=user_ex,
