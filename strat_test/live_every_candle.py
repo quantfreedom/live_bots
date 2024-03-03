@@ -22,7 +22,7 @@ class IndicatorSettingsArrays(NamedTuple):
     rsi_length: np.array
 
 
-class RSIsimple(Strategy):
+class EnterEveryCandle(Strategy):
     def __init__(
         self,
         long_short: str,
@@ -233,57 +233,13 @@ class RSIsimple(Strategy):
         self,
         candles: np.array,
     ):
-        try:
-            rsi = rsi_tv(
-                source=candles[:, CandleBodyType.Close],
-                length=self.rsi_length,
-            )
-
-            self.rsi = np.around(rsi, 1)
-            logger.info(f"Created RSI rsi_length= {self.rsi_length}")
-
-            current_rsi = self.rsi[-1]
-
-            if current_rsi < self.rsi_is_below:
-                logger.info("\n\n")
-                logger.info(
-                    f"Entry time!!! {current_rsi} < {self.rsi_is_below}"
-                )
-                return True
-            else:
-                logger.info("No Entry")
-                return False
-        except Exception as e:
-            logger.error(f"Exception long_live_evaluate -> {e}")
-            raise Exception(f"Exception long_live_evaluate -> {e}")
+        return True
 
     def short_live_evaluate(
         self,
         candles: np.array,
     ):
-        try:
-            rsi = rsi_tv(
-                source=candles[:, CandleBodyType.Close],
-                length=self.rsi_length,
-            )
-
-            self.rsi = np.around(rsi, 1)
-            logger.info(f"Created RSI rsi_length= {self.rsi_length}")
-
-            current_rsi = self.rsi[-1]
-
-            if current_rsi > self.rsi_is_above:
-                logger.info("\n\n")
-                logger.info(
-                    f"Entry time!!! {current_rsi} > {self.rsi_is_above}"
-                )
-                return True
-            else:
-                logger.info("No Entry")
-                return False
-        except Exception as e:
-            logger.error(f"Exception short_live_evaluate -> {e}")
-            raise Exception(f"Exception short_live_evaluate -> {e}")
+        return True
 
     #######################################################
     #######################################################

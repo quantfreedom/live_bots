@@ -3,10 +3,9 @@ from logging import getLogger
 from quantfreedom.custom_logger import set_loggers
 from quantfreedom.email_sender import EmailSender
 from quantfreedom.helper_funcs import dos_cart_product, get_dos, log_dynamic_order_settings
-from quantfreedom.live_mode import LiveTrading
 from quantfreedom.order_handler.order import OrderHandler
-from strat_test.live_strat import RSIsimple
 from my_stuff import EmailSenderInfo, BybitTestKeys
+from bybit_live_mode import LiveTrading
 from quantfreedom.enums import (
     CandleBodyType,
     DynamicOrderSettingsArrays,
@@ -19,12 +18,13 @@ from quantfreedom.enums import (
     PositionModeType,
 )
 
-
 from quantfreedom.exchanges.bybit_exchange.bybit import Bybit
+
+from live_every_candle import EnterEveryCandle
 
 logger = getLogger("info")
 
-strategy = RSIsimple(
+strategy = EnterEveryCandle(
     long_short="long",
     rsi_length=np.array([14]),
     rsi_is_below=np.array([100]),
@@ -43,6 +43,7 @@ user_ex = Bybit(
     secret_key=BybitTestKeys.secret_key,
     use_test_net=True,
 )
+
 logger.debug("set exchange")
 
 user_ex.set_exchange_settings(
@@ -60,7 +61,7 @@ except Exception as e:
     raise Exception(f"Couldn't get equity -> {e}")
 
 static_os = StaticOrderSettings(
-    increase_position_type=IncreasePositionType.RiskPctAccountEntrySize,
+    increase_position_type=IncreasePositionType.SmalletEntrySizeAsset,
     leverage_strategy_type=LeverageStrategyType.Dynamic,
     pg_min_max_sl_bcb="min",
     sl_strategy_type=StopLossStrategyType.SLBasedOnCandleBody,
@@ -77,7 +78,7 @@ logger.debug("set static order settings")
 
 dos_arrays = DynamicOrderSettingsArrays(
     max_equity_risk_pct=np.array([0.003]),
-    max_trades=np.array([5]),
+    max_trades=np.array([3]),
     risk_account_pct_size=np.array([0.001]),
     risk_reward=np.array([2, 5]),
     sl_based_on_add_pct=np.array([0.1, 0.25, 0.5]),
@@ -133,6 +134,6 @@ LiveTrading(
     trading_with="USDT",
     tp_order_type="limit",
 ).run(
-    candles_to_dl=200,
+    candles_to_dl=1000,
     timeframe="1m",
 )

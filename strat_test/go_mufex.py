@@ -5,7 +5,7 @@ from quantfreedom.email_sender import EmailSender
 from quantfreedom.helper_funcs import dos_cart_product, get_dos, log_dynamic_order_settings
 from quantfreedom.live_mode import LiveTrading
 from quantfreedom.order_handler.order import OrderHandler
-from strat_test.live_strat import RSIsimple
+from live_every_candle import EnterEveryCandle
 from my_stuff import EmailSenderInfo, MufexTestKeys
 from quantfreedom.enums import (
     CandleBodyType,
@@ -24,7 +24,7 @@ from quantfreedom.exchanges.mufex_exchange.mufex import Mufex
 
 logger = getLogger("info")
 
-strategy = RSIsimple(
+strategy = EnterEveryCandle(
     long_short="long",
     rsi_length=np.array([14]),
     rsi_is_below=np.array([100]),
