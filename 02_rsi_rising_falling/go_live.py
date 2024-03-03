@@ -34,8 +34,10 @@ set_loggers(log_folder=strategy.log_folder)
 
 logger.debug("set strategy and logger")
 
-strategy.live_set_indicator(ind_set_index=0)
-strategy.log_indicator_settings(ind_set_index=0)
+ind_set_index = 0
+
+strategy.live_set_indicator(ind_set_index=ind_set_index)
+strategy.log_indicator_settings(ind_set_index=ind_set_index)
 
 user_ex = Bybit(
     api_key=BybitTestKeys.api_key,
@@ -94,12 +96,14 @@ logger.debug("got dos arrays")
 dos_cart_arrays = dos_cart_product(dos_arrays=dos_arrays)
 logger.debug("got cart product of dos")
 
+dos_index = 15
+
 dynamic_order_settings = get_dos(
     dos_cart_arrays=dos_cart_arrays,
-    dos_index=0,
+    dos_index=dos_index,
 )
 log_dynamic_order_settings(
-    dos_index=0,
+    dos_index=dos_index,
     dynamic_order_settings=dynamic_order_settings,
 )
 
