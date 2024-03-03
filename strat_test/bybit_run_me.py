@@ -4,7 +4,8 @@ from quantfreedom.custom_logger import set_loggers
 from quantfreedom.email_sender import EmailSender
 from quantfreedom.helper_funcs import dos_cart_product, get_dos, log_dynamic_order_settings
 from quantfreedom.order_handler.order import OrderHandler
-from my_stuff import EmailSenderInfo, BybitTestKeys
+from my_stuff import BybitTestKeys
+# from my_stuff import EmailSenderInfo, BybitTestKeys
 from bybit_live_mode import LiveTrading
 from quantfreedom.enums import (
     CandleBodyType,
@@ -116,10 +117,10 @@ order.update_class_dos(dynamic_order_settings=dynamic_order_settings)
 order.set_order_variables(equity=equity)
 
 email_sender = EmailSender(
-    smtp_server=EmailSenderInfo.smtp_server,
-    sender_email=EmailSenderInfo.sender_email,
-    password=EmailSenderInfo.password,
-    receiver=EmailSenderInfo.receiver,
+    smtp_server="sdfasdfasdf",
+    sender_email="sdfasdfasdf",
+    password="sdfasdfasdf",
+    receiver="sdfasdfasdf",
 )
 logger.debug("set email sender")
 
