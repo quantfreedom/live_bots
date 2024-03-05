@@ -78,18 +78,18 @@ static_os = StaticOrderSettings(
 logger.debug("set static order settings")
 
 dos_arrays = DynamicOrderSettingsArrays(
-    max_equity_risk_pct=np.array([0.003]),
+    max_equity_risk_pct=np.array([0]),
     max_trades=np.array([3]),
-    risk_account_pct_size=np.array([0.001]),
-    risk_reward=np.array([5]),
-    sl_based_on_add_pct=np.array([0.1, 0.25, 0.5]),
-    sl_based_on_lookback=np.array([20, 50]),
+    risk_account_pct_size=np.array([0]),
+    risk_reward=np.array([1]),
+    sl_based_on_add_pct=np.array([0.5]),
+    sl_based_on_lookback=np.array([20]),
     sl_bcb_type=np.array([CandleBodyType.Low]),
     sl_to_be_cb_type=np.array([CandleBodyType.Nothing]),
     sl_to_be_when_pct=np.array([0]),
     trail_sl_bcb_type=np.array([CandleBodyType.Low]),
-    trail_sl_by_pct=np.array([0.5, 1.0]),
-    trail_sl_when_pct=np.array([1, 2]),
+    trail_sl_by_pct=np.array([1]),
+    trail_sl_when_pct=np.array([1]),
 )
 logger.debug("got dos arrays")
 
