@@ -115,6 +115,7 @@ class BybitLiveMode:
                         else:
                             logger.debug("we are not in a position updating order info")
                             self.order.position_size_usd = 0.0
+                            self.order.position_size_asset = 0.0
                             self.order.average_entry = 0.0
                             self.order.equity = self.exchange.get_equity_of_asset(trading_with=self.trading_with)
                             self.order.available_balance = self.order.equity
