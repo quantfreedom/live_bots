@@ -324,8 +324,9 @@ class BybitLiveMode:
                                 tp_order_id=tp_order_id,
                             )
                             message = self.__create_entry_successful_message()
-                            entry_filename = self.__get_entry_plot_filename()
-                            strategy_filename = self.strategy.get_strategy_plot_filename(candles=self.candles)
+                            print('Placed a new Trade')
+                            # entry_filename = self.__get_entry_plot_filename()
+                            # strategy_filename = self.strategy.get_strategy_plot_filename(candles=self.candles)
                             # self.email_sender.email_new_order(
                             #     message=message,
                             #     entry_filename=entry_filename,
@@ -380,6 +381,7 @@ class BybitLiveMode:
                             logger.error(f"Exception checking MoveStopLoss -> {e}")
                             raise Exception(f"Exception checking MoveStopLoss -> {e}")
                 elif latest_pnl != self.last_pnl:
+                    print(f"Got a new pnl {latest_pnl}")
                     logger.info(f"Got a new pnl {latest_pnl}")
                     # self.email_sender.email_pnl(pnl=latest_pnl)
                     self.last_pnl = latest_pnl
@@ -503,67 +505,67 @@ class BybitLiveMode:
             \n[ex_possible profit={self.ex_possible_profit}]"
         return message
 
-    def __get_entry_plot_filename(self):
-        logger.debug("Getting entry plot file")
-        latest_candles = self.candles[-50:]
-        latest_candles_datetimes = pd.to_datetime(latest_candles[:, CandleBodyType.Timestamp], unit="ms")
-        graph_entry = [latest_candles_datetimes[-1]]
-        fig = go.Figure()
-        fig.add_candlestick(
-            x=latest_candles_datetimes,
-            open=latest_candles[:, CandleBodyType.Open],
-            high=latest_candles[:, CandleBodyType.High],
-            low=latest_candles[:, CandleBodyType.Low],
-            close=latest_candles[:, CandleBodyType.Close],
-            name="Exchange order",
-        )
-        # entry
-        fig.add_scatter(
-            x=graph_entry,
-            y=[self.order.entry_price],
-            mode="markers",
-            marker=dict(size=10, color="LightSeaGreen"),
-            name=f"Entry",
-        )
-        # average entry
-        fig.add_scatter(
-            x=graph_entry,
-            y=[self.ex_average_entry],
-            mode="markers",
-            marker=dict(size=10, color="purple", symbol="arrow-up"),
-            name=f"Average Entry",
-        )
-        # take profit
-        fig.add_scatter(
-            x=graph_entry,
-            y=[self.ex_tp_price],
-            mode="markers",
-            marker=dict(size=10, symbol="star", color="Green"),
-            name=f"Take Profit",
-        )
-        # stop loss
-        fig.add_scatter(
-            x=graph_entry,
-            y=[self.ex_sl_price],
-            mode="markers",
-            marker=dict(size=10, symbol="x", color="orange"),
-            name=f"Stop Loss",
-        )
-        # liq price
-        fig.add_scatter(
-            x=graph_entry,
-            y=[self.ex_liq_price],
-            mode="markers",
-            marker=dict(size=10, symbol="hexagram", color="red"),
-            name=f"Liq Price",
-        )
-        fig.update_layout(height=800, xaxis_rangeslider_visible=False)
-        fig.show()
-        entry_filename = os.path.join(
-            self.strategy.log_folder,
-            "logs",
-            "images",
-            f'entry_{datetime.utcnow().strftime("%m-%d-%Y_%H-%M-%S")}.png',
-        )
-        fig.write_image(entry_filename)
-        return entry_filename
+    # def __get_entry_plot_filename(self):
+    #     logger.debug("Getting entry plot file")
+    #     latest_candles = self.candles[-50:]
+    #     latest_candles_datetimes = pd.to_datetime(latest_candles[:, CandleBodyType.Timestamp], unit="ms")
+    #     graph_entry = [latest_candles_datetimes[-1]]
+    #     fig = go.Figure()
+    #     fig.add_candlestick(
+    #         x=latest_candles_datetimes,
+    #         open=latest_candles[:, CandleBodyType.Open],
+    #         high=latest_candles[:, CandleBodyType.High],
+    #         low=latest_candles[:, CandleBodyType.Low],
+    #         close=latest_candles[:, CandleBodyType.Close],
+    #         name="Exchange order",
+    #     )
+    #     # entry
+    #     fig.add_scatter(
+    #         x=graph_entry,
+    #         y=[self.order.entry_price],
+    #         mode="markers",
+    #         marker=dict(size=10, color="LightSeaGreen"),
+    #         name=f"Entry",
+    #     )
+    #     # average entry
+    #     fig.add_scatter(
+    #         x=graph_entry,
+    #         y=[self.ex_average_entry],
+    #         mode="markers",
+    #         marker=dict(size=10, color="purple", symbol="arrow-up"),
+    #         name=f"Average Entry",
+    #     )
+    #     # take profit
+    #     fig.add_scatter(
+    #         x=graph_entry,
+    #         y=[self.ex_tp_price],
+    #         mode="markers",
+    #         marker=dict(size=10, symbol="star", color="Green"),
+    #         name=f"Take Profit",
+    #     )
+    #     # stop loss
+    #     fig.add_scatter(
+    #         x=graph_entry,
+    #         y=[self.ex_sl_price],
+    #         mode="markers",
+    #         marker=dict(size=10, symbol="x", color="orange"),
+    #         name=f"Stop Loss",
+    #     )
+    #     # liq price
+    #     fig.add_scatter(
+    #         x=graph_entry,
+    #         y=[self.ex_liq_price],
+    #         mode="markers",
+    #         marker=dict(size=10, symbol="hexagram", color="red"),
+    #         name=f"Liq Price",
+    #     )
+    #     fig.update_layout(height=800, xaxis_rangeslider_visible=False)
+    #     fig.show()
+    #     entry_filename = os.path.join(
+    #         self.strategy.log_folder,
+    #         "logs",
+    #         "images",
+    #         f'entry_{datetime.utcnow().strftime("%m-%d-%Y_%H-%M-%S")}.png',
+    #     )
+    #     fig.write_image(entry_filename)
+    #     return entry_filename
