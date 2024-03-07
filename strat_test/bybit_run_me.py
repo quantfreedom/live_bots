@@ -6,7 +6,6 @@ from quantfreedom.helper_funcs import dos_cart_product, get_dos, log_dynamic_ord
 from quantfreedom.order_handler.order import OrderHandler
 from my_stuff import BybitTestKeys
 # from my_stuff import EmailSenderInfo, BybitTestKeys
-from bybit_live_mode import BybitLiveMode
 from quantfreedom.enums import (
     CandleBodyType,
     DynamicOrderSettingsArrays,
@@ -20,8 +19,9 @@ from quantfreedom.enums import (
 )
 
 from quantfreedom.exchanges.bybit_exchange.bybit import Bybit
+from quantfreedom.exchanges.bybit_exchange.bybit_live_mode import BybitLiveMode
 
-from live_every_candle import EnterEveryCandle
+from strat_test.enter_every_candle import EnterEveryCandle
 
 logger = getLogger("info")
 
