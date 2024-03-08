@@ -1,10 +1,10 @@
 import numpy as np
+import sys
 from logging import getLogger
 from quantfreedom.custom_logger import set_loggers
 from quantfreedom.email_sender import EmailSender
 from quantfreedom.helper_funcs import dos_cart_product, get_dos, log_dynamic_order_settings
 from quantfreedom.order_handler.order import OrderHandler
-from my_stuff import BybitTestKeys
 from live_strat import RSIRisingFalling
 from quantfreedom.enums import (
     CandleBodyType,
@@ -40,8 +40,8 @@ strategy.live_set_indicator(ind_set_index=ind_set_index)
 strategy.log_indicator_settings(ind_set_index=ind_set_index)
 
 user_ex = Bybit(
-    api_key=BybitTestKeys.api_key,
-    secret_key=BybitTestKeys.secret_key,
+    api_key=sys.argv[1],
+    secret_key=sys.argv[2],
     use_test_net=True,
 )
 
