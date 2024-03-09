@@ -39,12 +39,18 @@ ind_set_index = 0
 strategy.live_set_indicator(ind_set_index=ind_set_index)
 strategy.log_indicator_settings(ind_set_index=ind_set_index)
 
+if sys.argv[3].lower() == "false":
+    use_test_net = False
+elif sys.argv[3].lower() == "true":
+    use_test_net = True
+else:
+    raise Exception("Make sure you put True or false for use test net")
+
 user_ex = Bybit(
     api_key=sys.argv[1],
     secret_key=sys.argv[2],
-    use_test_net=bool(sys.argv[3]),
+    use_test_net=use_test_net,
 )
-
 logger.debug("set exchange")
 
 user_ex.set_exchange_settings(
