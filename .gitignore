@@ -16,8 +16,6 @@ quantfreedom.egg-info
 numba_cache
 thinking.txt
 
-## ignore
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
