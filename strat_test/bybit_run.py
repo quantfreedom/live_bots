@@ -19,7 +19,7 @@ from quantfreedom.enums import (
 
 from quantfreedom.exchanges.bybit_exchange.bybit_live_mode import BybitLiveMode
 from quantfreedom.exchanges.bybit_exchange.bybit import Bybit
-from strat_test.enter_every_candle import EnterEveryCandle
+from enter_every_candle import EnterEveryCandle
 
 logger = getLogger("info")
 
