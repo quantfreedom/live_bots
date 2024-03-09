@@ -1,12 +1,10 @@
-import numpy as np
 import sys
+import numpy as np
 from logging import getLogger
 from quantfreedom.custom_logger import set_loggers
 from quantfreedom.email_sender import EmailSender
 from quantfreedom.helper_funcs import dos_cart_product, get_dos, log_dynamic_order_settings
 from quantfreedom.order_handler.order import OrderHandler
-from my_stuff import MufexTestKeys
-from live_strat import RSIRisingFalling
 from quantfreedom.enums import (
     CandleBodyType,
     DynamicOrderSettingsArrays,
@@ -21,6 +19,7 @@ from quantfreedom.enums import (
 
 from quantfreedom.exchanges.mufex_exchange.mufex import Mufex
 from quantfreedom.exchanges.mufex_exchange.mufex_live_mode import MufexLiveMode
+from live_strat import RSIRisingFalling
 
 logger = getLogger("info")
 

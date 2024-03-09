@@ -1,11 +1,10 @@
+import sys
 import numpy as np
 from logging import getLogger
 from quantfreedom.custom_logger import set_loggers
 from quantfreedom.email_sender import EmailSender
 from quantfreedom.helper_funcs import dos_cart_product, get_dos, log_dynamic_order_settings
 from quantfreedom.order_handler.order import OrderHandler
-from my_stuff import BybitTestKeys
-# from my_stuff import EmailSenderInfo, BybitTestKeys
 from quantfreedom.enums import (
     CandleBodyType,
     DynamicOrderSettingsArrays,
@@ -18,9 +17,8 @@ from quantfreedom.enums import (
     PositionModeType,
 )
 
-from quantfreedom.exchanges.bybit_exchange.bybit import Bybit
 from quantfreedom.exchanges.bybit_exchange.bybit_live_mode import BybitLiveMode
-
+from quantfreedom.exchanges.bybit_exchange.bybit import Bybit
 from strat_test.enter_every_candle import EnterEveryCandle
 
 logger = getLogger("info")
@@ -40,9 +38,9 @@ strategy.live_set_indicator(ind_set_index=0)
 strategy.log_indicator_settings(ind_set_index=0)
 
 user_ex = Bybit(
-    api_key=BybitTestKeys.api_key,
-    secret_key=BybitTestKeys.secret_key,
-    use_test_net=True,
+    api_key=sys.argv[1],
+    secret_key=sys.argv[2],
+    use_test_net=bool(sys.argv[3]),
 )
 
 logger.debug("set exchange")

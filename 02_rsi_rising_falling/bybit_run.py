@@ -1,11 +1,10 @@
-import numpy as np
 import sys
+import numpy as np
 from logging import getLogger
 from quantfreedom.custom_logger import set_loggers
 from quantfreedom.email_sender import EmailSender
 from quantfreedom.helper_funcs import dos_cart_product, get_dos, log_dynamic_order_settings
 from quantfreedom.order_handler.order import OrderHandler
-from live_strat import RSIRisingFalling
 from quantfreedom.enums import (
     CandleBodyType,
     DynamicOrderSettingsArrays,
@@ -18,8 +17,9 @@ from quantfreedom.enums import (
     PositionModeType,
 )
 
-from quantfreedom.exchanges.bybit_exchange.bybit import Bybit
 from quantfreedom.exchanges.bybit_exchange.bybit_live_mode import BybitLiveMode
+from quantfreedom.exchanges.bybit_exchange.bybit import Bybit
+from live_strat import RSIRisingFalling
 
 logger = getLogger("info")
 
@@ -42,7 +42,7 @@ strategy.log_indicator_settings(ind_set_index=ind_set_index)
 user_ex = Bybit(
     api_key=sys.argv[1],
     secret_key=sys.argv[2],
-    use_test_net=True,
+    use_test_net=bool(sys.argv[3]),
 )
 
 logger.debug("set exchange")
