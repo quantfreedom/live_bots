@@ -11,5 +11,5 @@ cd live_bots
 pip install quantfreedom
 export PATH="$PATH:/home/ubuntu/.local/bin"
 cd %%%%%%%STRAT_FOLDER
-python3 %%%%%%%RUN_FILE.py %%%%%%%API_KEY %%%%%%%SECRET_KEY %%%%%%%USE_TEST_NET
+python3 %%%%%%%RUN_FILE.py %%%%%%%API_KEY %%%%%%%SECRET_KEY %%%%%%%USE_TEST_NET %%%%%%%%EXCHANGE_NAME
 
