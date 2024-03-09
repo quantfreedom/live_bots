@@ -160,7 +160,7 @@ if sys.argv[4].lower() == "bybit":
         tp_order_type="limit",
     ).run(
         candles_to_dl=1000,
-        timeframe="1m",
+        timeframe="5m",
     )
 elif sys.argv[4].lower() == "mufex":
     MufexLiveMode(
