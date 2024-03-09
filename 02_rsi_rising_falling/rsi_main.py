@@ -51,13 +51,13 @@ elif sys.argv[3].lower() == "true":
 else:
     raise Exception("Make sure you put True or false for use test net")
 
-if sys.argv[5].lower() == "mufex":
+if sys.argv[4].lower() == "mufex":
     user_ex = Mufex(
         api_key=sys.argv[1],
         secret_key=sys.argv[2],
         use_test_net=use_test_net,
     )
-elif sys.argv[5].lower() == "bybit":
+elif sys.argv[4].lower() == "bybit":
     user_ex = Bybit(
         api_key=sys.argv[1],
         secret_key=sys.argv[2],
@@ -148,7 +148,7 @@ logger.debug("set email sender")
 
 logger.debug("running live trading")
 
-if sys.argv[5].lower() == "bybit":
+if sys.argv[4].lower() == "bybit":
     BybitLiveMode(
         email_sender=email_sender,
         entry_order_type="market",
@@ -162,7 +162,7 @@ if sys.argv[5].lower() == "bybit":
         candles_to_dl=1000,
         timeframe="1m",
     )
-elif sys.argv[5].lower() == "mufex":
+elif sys.argv[4].lower() == "mufex":
     MufexLiveMode(
         email_sender=email_sender,
         entry_order_type="market",
