@@ -17,16 +17,22 @@ from quantfreedom.enums import (
     PositionModeType,
 )
 
+
 from quantfreedom.exchanges.bybit_exchange.bybit_live_mode import BybitLiveMode
+from quantfreedom.exchanges.mufex_exchange.mufex_live_mode import MufexLiveMode
 from quantfreedom.exchanges.bybit_exchange.bybit import Bybit
+from quantfreedom.exchanges.mufex_exchange.mufex import Mufex
 from live_strat import RSIRisingFalling
 
 logger = getLogger("info")
 
+ind_set_index = 6
+dos_index = 6
+
 strategy = RSIRisingFalling(
     long_short="long",
     rsi_length=np.array([14]),
-    rsi_is_below=np.array([100]),
+    rsi_is_below=np.arange(30, 61, 5),
 )
 
 logger.disabled = False
@@ -34,7 +40,6 @@ set_loggers(log_folder=strategy.log_folder)
 
 logger.debug("set strategy and logger")
 
-ind_set_index = 0
 
 strategy.live_set_indicator(ind_set_index=ind_set_index)
 strategy.log_indicator_settings(ind_set_index=ind_set_index)
@@ -46,11 +51,21 @@ elif sys.argv[3].lower() == "true":
 else:
     raise Exception("Make sure you put True or false for use test net")
 
-user_ex = Bybit(
-    api_key=sys.argv[1],
-    secret_key=sys.argv[2],
-    use_test_net=use_test_net,
-)
+if sys.argv[5].lower() == "mufex":
+    user_ex = Mufex(
+        api_key=sys.argv[1],
+        secret_key=sys.argv[2],
+        use_test_net=use_test_net,
+    )
+elif sys.argv[5].lower() == "bybit":
+    user_ex = Bybit(
+        api_key=sys.argv[1],
+        secret_key=sys.argv[2],
+        use_test_net=use_test_net,
+    )
+else:
+    raise Exception("Pleas type mufex or bybit as your exchange")
+
 logger.debug("set exchange")
 
 user_ex.set_exchange_settings(
@@ -74,35 +89,33 @@ static_os = StaticOrderSettings(
     sl_strategy_type=StopLossStrategyType.SLBasedOnCandleBody,
     sl_to_be_bool=False,
     starting_bar=50,
-    starting_equity=1000.0,
+    starting_equity=equity,
     static_leverage=None,
     tp_fee_type="limit",
     tp_strategy_type=TakeProfitStrategyType.RiskReward,
-    trail_sl_bool=False,
+    trail_sl_bool=True,
     z_or_e_type=None,
 )
 logger.debug("set static order settings")
 
 dos_arrays = DynamicOrderSettingsArrays(
-    max_equity_risk_pct=np.array([0.003]),
-    max_trades=np.array([3]),
-    risk_account_pct_size=np.array([0.001]),
+    max_equity_risk_pct=np.array([12]),
+    max_trades=np.array([4]),
+    risk_account_pct_size=np.array([3]),
     risk_reward=np.array([2, 5]),
-    sl_based_on_add_pct=np.array([0.1, 0.25, 0.5]),
-    sl_based_on_lookback=np.array([20, 50]),
+    sl_based_on_add_pct=np.array([1, 0.25]),
+    sl_based_on_lookback=np.array([30]),
     sl_bcb_type=np.array([CandleBodyType.Low]),
     sl_to_be_cb_type=np.array([CandleBodyType.Nothing]),
     sl_to_be_when_pct=np.array([0]),
     trail_sl_bcb_type=np.array([CandleBodyType.Low]),
-    trail_sl_by_pct=np.array([0.5, 1.0]),
+    trail_sl_by_pct=np.array([1, 2, 3]),
     trail_sl_when_pct=np.array([1, 2]),
 )
 logger.debug("got dos arrays")
 
 dos_cart_arrays = dos_cart_product(dos_arrays=dos_arrays)
 logger.debug("got cart product of dos")
-
-dos_index = 15
 
 dynamic_order_settings = get_dos(
     dos_cart_arrays=dos_cart_arrays,
@@ -130,19 +143,38 @@ email_sender = EmailSender(
     password="sdfasdfasdf",
     receiver="sdfasdfasdf",
 )
+
 logger.debug("set email sender")
 
 logger.debug("running live trading")
-BybitLiveMode(
-    email_sender=email_sender,
-    entry_order_type="market",
-    exchange=user_ex,
-    order=order,
-    strategy=strategy,
-    symbol="BTCUSDT",
-    trading_with="USDT",
-    tp_order_type="limit",
-).run(
-    candles_to_dl=1000,
-    timeframe="1m",
-)
+
+if sys.argv[5].lower() == "bybit":
+    BybitLiveMode(
+        email_sender=email_sender,
+        entry_order_type="market",
+        exchange=user_ex,
+        order=order,
+        strategy=strategy,
+        symbol="BTCUSDT",
+        trading_with="USDT",
+        tp_order_type="limit",
+    ).run(
+        candles_to_dl=1000,
+        timeframe="1m",
+    )
+elif sys.argv[5].lower() == "mufex":
+    MufexLiveMode(
+        email_sender=email_sender,
+        entry_order_type="market",
+        exchange=user_ex,
+        order=order,
+        strategy=strategy,
+        symbol="BTCUSDT",
+        trading_with="USDT",
+        tp_order_type="limit",
+    ).run(
+        candles_to_dl=1000,
+        timeframe="5m",
+    )
+else:
+    raise Exception("Pleas type mufex or bybit as your exchange")
