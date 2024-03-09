@@ -83,7 +83,7 @@ except Exception as e:
     raise Exception(f"Couldn't get equity -> {e}")
 
 static_os = StaticOrderSettings(
-    increase_position_type=IncreasePositionType.SmalletEntrySizeAsset,
+    increase_position_type=IncreasePositionType.RiskPctAccountEntrySize,
     leverage_strategy_type=LeverageStrategyType.Dynamic,
     pg_min_max_sl_bcb="min",
     sl_strategy_type=StopLossStrategyType.SLBasedOnCandleBody,
@@ -100,7 +100,7 @@ logger.debug("set static order settings")
 
 dos_arrays = DynamicOrderSettingsArrays(
     max_equity_risk_pct=np.array([12]),
-    max_trades=np.array([4]),
+    max_trades=np.array([0]),
     risk_account_pct_size=np.array([3]),
     risk_reward=np.array([2, 5]),
     sl_based_on_add_pct=np.array([1, 0.25]),
