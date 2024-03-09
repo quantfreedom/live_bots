@@ -10,5 +10,5 @@ mv Quant* live_bots
 cd live_bots
 pip install quantfreedom==0.1.4.1
 export PATH="$PATH:/home/ubuntu/.local/bin"
-cd strat_test
-python3 %%%%%%%EXCHANGE_run.py %%%%%%%API_KEY %%%%%%%SECRET_KEY %%%%%%%USE_TEST_NET
+cd %%%%%%%STRAT_FOLDER
+python3 %%%%%%%FILE_NAME.py %%%%%%%API_KEY %%%%%%%SECRET_KEY %%%%%%%USE_TEST_NET
